@@ -1,2 +1,2 @@
 # Appointment System
-Sistema de apontamento de horas em projetos
+Sistema para apontamento de horas em projetos
