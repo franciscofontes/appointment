@@ -1,4 +1,4 @@
-package com.zallpy.appointment.domain.entity;
+package com.zallpy.appointment.application.domain.entity;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.zallpy.appointment.domain.entity;
+package com.zallpy.appointment.application.domain.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Colaborador implements Serializable {
+public class Projeto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,10 +18,10 @@ public class Colaborador implements Serializable {
 	private Long id;
 	private String nome;
 
-	public Colaborador() {
+	public Projeto() {
 	}
 
-	public Colaborador(Long id, String nome) {
+	public Projeto(Long id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -56,7 +56,7 @@ public class Colaborador implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Colaborador other = (Colaborador) obj;
+		Projeto other = (Projeto) obj;
 		return Objects.equals(id, other.id);
 	}
 

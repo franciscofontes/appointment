@@ -1,29 +1,31 @@
-package com.zallpy.appointment.domain.entity;
+package com.zallpy.appointment.application.domain.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Projeto implements Serializable {
+public class Colaborador implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(unique = true)
 	private String nome;
 
-	public Projeto() {
+	public Colaborador() {
 	}
 
-	public Projeto(Long id, String nome) {
+	public Colaborador(String nome) {
 		super();
-		this.id = id;
 		this.nome = nome;
 	}
 
@@ -56,7 +58,7 @@ public class Projeto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Projeto other = (Projeto) obj;
+		Colaborador other = (Colaborador) obj;
 		return Objects.equals(id, other.id);
 	}
 
