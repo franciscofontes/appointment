@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.zallpy.appointment.application.domain.entity.Colaborador;
-import com.zallpy.appointment.application.repositoy.ColaboradorRepository;
+import com.zallpy.appointment.application.repository.ColaboradorRepository;
 
 @Service
 public class ColaboradorService implements CrudService<Colaborador, Long> {
