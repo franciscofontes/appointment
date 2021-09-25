@@ -24,8 +24,11 @@ public class Projeto implements Serializable {
 	public Projeto() {
 	}
 
+	public Projeto(Long id) {
+		this.id = id;
+	}	
+	
 	public Projeto(String nome) {
-		super();
 		this.nome = nome;
 	}
 
