@@ -1,14 +1,19 @@
 package com.zallpy.appointment.application.domain.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Alocacao implements Serializable {
@@ -27,6 +32,9 @@ public class Alocacao implements Serializable {
 	@ManyToOne
 	private Projeto projeto;
 
+	@OneToMany(mappedBy = "alocacao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Apontamento> apontamentos;
+
 	public Alocacao() {
 	}
 
@@ -34,6 +42,15 @@ public class Alocacao implements Serializable {
 		super();
 		this.colaborador = colaborador;
 		this.projeto = projeto;
+	}
+
+	public void addApontamento(Apontamento apontamento) {
+		if (apontamento != null) {
+			apontamento.setAlocacao(this);
+			if (!getApontamentos().contains(apontamento)) {
+				getApontamentos().add(apontamento);
+			}
+		}
 	}
 
 	public Long getId() {
@@ -60,6 +77,17 @@ public class Alocacao implements Serializable {
 		this.projeto = projeto;
 	}
 
+	public Set<Apontamento> getApontamentos() {
+		if (apontamentos == null) {
+			apontamentos = new HashSet<>();
+		}
+		return apontamentos;
+	}
+
+	public void setApontamentos(Set<Apontamento> apontamentos) {
+		this.apontamentos = apontamentos;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(colaborador, projeto);
@@ -75,6 +103,12 @@ public class Alocacao implements Serializable {
 			return false;
 		Alocacao other = (Alocacao) obj;
 		return Objects.equals(colaborador, other.colaborador) && Objects.equals(projeto, other.projeto);
+	}
+
+	@Override
+	public String toString() {
+		return "Alocacao [id=" + id + ", colaborador=" + colaborador + ", projeto=" + projeto + ", apontamentos="
+				+ apontamentos + "]";
 	}
 
 }

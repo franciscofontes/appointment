@@ -17,7 +17,7 @@ public class Projeto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(unique = true)
 	private String nome;
 
@@ -25,7 +25,7 @@ public class Projeto implements Serializable {
 	}
 
 	public Projeto(String nome) {
-		super();		
+		super();
 		this.nome = nome;
 	}
 
@@ -60,6 +60,11 @@ public class Projeto implements Serializable {
 			return false;
 		Projeto other = (Projeto) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Projeto [id=" + id + ", nome=" + nome + "]";
 	}
 
 }

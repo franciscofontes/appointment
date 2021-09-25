@@ -17,7 +17,7 @@ public class Colaborador implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(unique = true)
 	private String nome;
 
@@ -60,6 +60,11 @@ public class Colaborador implements Serializable {
 			return false;
 		Colaborador other = (Colaborador) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Colaborador [id=" + id + ", nome=" + nome + "]";
 	}
 
 }
