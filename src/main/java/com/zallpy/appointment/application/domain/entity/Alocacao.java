@@ -43,6 +43,11 @@ public class Alocacao implements Serializable {
 		this.colaborador = colaborador;
 		this.projeto = projeto;
 	}
+	
+	public Alocacao(Colaborador colaborador) {
+		super();
+		this.colaborador = colaborador;
+	}
 
 	public void addApontamento(Apontamento apontamento) {
 		if (apontamento != null) {

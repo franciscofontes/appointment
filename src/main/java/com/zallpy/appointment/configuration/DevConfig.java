@@ -47,7 +47,7 @@ public class DevConfig implements WebMvcConfigurer {
 
 		colaboradorService.salvarTodos(Arrays.asList(administrador, programador1, programador2));
 		projetoService.salvarTodos(Arrays.asList(projetoA, projetoB));
-		alocacaoService.salvarTodos(Arrays.asList(a1, a2, a3));
+		alocacaoService.salvarTodos(Arrays.asList(a1, a2, a3));		
 
 		return true;
 	}
