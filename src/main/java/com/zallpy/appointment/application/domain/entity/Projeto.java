@@ -3,6 +3,7 @@ package com.zallpy.appointment.application.domain.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,14 +17,15 @@ public class Projeto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(unique = true)
 	private String nome;
 
 	public Projeto() {
 	}
 
-	public Projeto(Long id, String nome) {
-		super();
-		this.id = id;
+	public Projeto(String nome) {
+		super();		
 		this.nome = nome;
 	}
 

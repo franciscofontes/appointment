@@ -33,6 +33,11 @@ public interface CrudService<T, ID> {
 	default void salvar(T obj) throws MethodArgumentNotValidException {
 		getRepository().save(obj);
 	}
+	
+	@Transactional
+	default void salvarTodos(Iterable<T> objs) throws MethodArgumentNotValidException {
+		getRepository().saveAll(objs);
+	}	
 
 	@Transactional
 	default void remover(ID id) throws MethodArgumentNotValidException {
