@@ -43,28 +43,18 @@ public class Perfil implements Serializable {
 		this.nome = nome;
 	}
 	
+	public void addModuloAcao(ModuloAcao moduloAcao) {
+		if (getModuloAcoes() == null) {
+			moduloAcoes = new HashSet<>();
+		}
+		moduloAcoes.add(moduloAcao);
+	}	
+	
 	public void addModulosAcao(List<ModuloAcao> list) {
 		if (getModuloAcoes() == null) {
 			moduloAcoes = new HashSet<>();
 		}
 		moduloAcoes.addAll(list);
-	}
-
-	public void setAcoesDoModulo(Modulo modulo, List<ModuloAcao> acoes) {		
-		/*
-		if (getModuloAcoes().isEmpty()) {
-			getModuloAcoes().addAll(acoes);
-		} else {
-			List<ModuloAcao> lista = new ArrayList<>();
-			lista.addAll(getModuloAcoes());
-			for (ModuloAcao ma : lista) { // Remove acoes atuais do modulo
-				if (Objects.equals(ma.getModulo().getId(), modulo.getId())) {
-					getModuloAcoes().remove(ma);
-				}
-			}
-			getModuloAcoes().addAll(acoes); // Adiciona acoes do modulo escolhidas
-		}
-		*/
 	}
 
 	public int getTotalAcoesDoModulo(Modulo modulo) {

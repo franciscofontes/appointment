@@ -25,7 +25,6 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String nome;
 
     private boolean ativo;
@@ -48,11 +47,13 @@ public class Usuario implements Serializable {
     private Perfil perfil;
 
     public Usuario() {
+    	this.dataCadastro = new Date();
     }
 
     public Usuario(String nome, String email) {
         this.nome = nome;
         this.email = email;
+        this.dataCadastro = new Date();
     }
     
     public Usuario(String nome, String email, Perfil perfil) {
@@ -60,6 +61,7 @@ public class Usuario implements Serializable {
     	this.email = email;
     	this.perfil = perfil;
     	this.ativo = true;
+    	this.dataCadastro = new Date();
     }    
     
     public Usuario(String nome, String email, String senha, Perfil perfil) {
@@ -68,6 +70,7 @@ public class Usuario implements Serializable {
     	this.senha = senha;
     	this.perfil = perfil;
     	this.ativo = true;
+    	this.dataCadastro = new Date();
     }
 
     public boolean possuiPermissao(String acao) {
