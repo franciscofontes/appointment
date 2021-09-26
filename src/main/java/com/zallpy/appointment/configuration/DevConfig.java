@@ -3,6 +3,7 @@ package com.zallpy.appointment.configuration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -62,6 +63,7 @@ public class DevConfig implements WebMvcConfigurer {
 	private BCryptPasswordEncoder pe;
 
 	private List<Acao> todasAcoes = new ArrayList<>();
+	private List<Modulo> todosModulos = new ArrayList<>();
 
 	@Transactional
 	@Bean
@@ -103,38 +105,68 @@ public class DevConfig implements WebMvcConfigurer {
 		Acao cadastrar = new Acao("CADASTRAR", "Cadastrar", "Cadastra registros");
 		Acao editar = new Acao("EDITAR", "Editar", "Edita registros");
 		Acao remover = new Acao("REMOVER", "Remover", "Remove registros");
+		Acao listarPorProjeto = new Acao("LISTAR_POR_PROJETO", "Listar por projeto", "Lista registros");
+		Acao listarPorColaborador = new Acao("LISTAR_POR_COLABORADOR", "Listar por colaborador", "Lista registros");		
 
-		todasAcoes = Arrays.asList(listar, cadastrar, editar, remover);
+		todasAcoes = Arrays.asList(listar, cadastrar, editar, remover, listarPorProjeto, listarPorColaborador);
 
 		acaoService.salvarTodos(todasAcoes);
 	}
 
 	@Transactional
 	private void cadastrarModulos() throws Exception {
-		Modulo apontamento = new Modulo("APONTAMENTO", "Apontamento", "Módulo para apontamento em projetos");
-		moduloService.salvarTodos(Arrays.asList(apontamento));
+		
+		Modulo projeto = new Modulo("PROJETO", "Projeto", "Módulo para gerenciar projetos");
+		Modulo alocacao = new Modulo("ALOCACAO", "Alocacao", "Módulo para alocacao de colaboradores em projetos");
+		Modulo apontamento = new Modulo("APONTAMENTO", "Apontamento", "Módulo para apontamento em projetos");		
+		
+		todosModulos = Arrays.asList(projeto, alocacao, apontamento); 
+				
+		moduloService.salvarTodos(todosModulos);
 	}
 
 	@Transactional
 	private void cadastrarModulosAcoes() throws Exception {
-		Modulo apontamento = moduloService.buscarPorNome("APONTAMENTO");
-		for (Acao acao : todasAcoes) {
-			moduloAcaoService.salvar(new ModuloAcao(apontamento, acao));
-		}
+
+		Optional<Acao> listar = todasAcoes.stream().filter(acao -> acao.getNome().equals("LISTAR")).findFirst();
+		Optional<Acao> listarPorProjeto = todasAcoes.stream().filter(acao -> acao.getNome().equals("LISTAR_POR_PROJETO")).findFirst();
+		Optional<Acao> listarPorColaborador = todasAcoes.stream().filter(acao -> acao.getNome().equals("LISTAR_POR_COLABORADOR")).findFirst();
+		Optional<Acao> cadastrar = todasAcoes.stream().filter(acao -> acao.getNome().equals("CADASTRAR")).findFirst();
+		
+		Optional<Modulo> projeto = todosModulos.stream().filter(modulo -> modulo.getNome().equals("PROJETO")).findFirst();
+		moduloAcaoService.salvar(new ModuloAcao(projeto.get(), listar.get()));
+		
+		Optional<Modulo> alocacao = todosModulos.stream().filter(modulo -> modulo.getNome().equals("ALOCACAO")).findFirst();
+		moduloAcaoService.salvar(new ModuloAcao(alocacao.get(), listar.get()));
+		moduloAcaoService.salvar(new ModuloAcao(alocacao.get(), listarPorProjeto.get()));
+		moduloAcaoService.salvar(new ModuloAcao(alocacao.get(), listarPorColaborador.get()));
+		
+		Optional<Modulo> apontamento = todosModulos.stream().filter(modulo -> modulo.getNome().equals("APONTAMENTO")).findFirst();		
+		moduloAcaoService.salvar(new ModuloAcao(apontamento.get(), cadastrar.get()));
 	}
 
 	@Transactional
 	private void cadastrarPerfis() throws Exception {
 
-		Modulo apontamento = moduloService.buscarPorNome("APONTAMENTO");
-		List<ModuloAcao> todasModulosAcoesApontamento = moduloAcaoService.buscarPorModulo(apontamento.getId());
+		Optional<Modulo> projeto = todosModulos.stream().filter(modulo -> modulo.getNome().equals("PROJETO")).findFirst();
+		Optional<Modulo> alocacao = todosModulos.stream().filter(modulo -> modulo.getNome().equals("ALOCACAO")).findFirst();
+		Optional<Modulo> apontamento = todosModulos.stream().filter(modulo -> modulo.getNome().equals("APONTAMENTO")).findFirst();		
+		
+		List<ModuloAcao> todosModulosAcoesProjeto = moduloAcaoService.buscarPorModulo(projeto.get().getId());
+		List<ModuloAcao> todosModulosAcoesAlocacao = moduloAcaoService.buscarPorModulo(alocacao.get().getId());
+		List<ModuloAcao> todosModulosAcoesApontamento = moduloAcaoService.buscarPorModulo(apontamento.get().getId());
 
 		Perfil adm = new Perfil("ADM");
-		adm.addModulosAcao(todasModulosAcoesApontamento);
+		adm.addModulosAcao(todosModulosAcoesProjeto);
+		adm.addModulosAcao(todosModulosAcoesAlocacao);
+		adm.addModulosAcao(todosModulosAcoesApontamento);
 		perfilService.salvar(adm);
 
 		Perfil colaborador = new Perfil("COLABORADOR");
-		//colaborador.addModulosAcao(todasModulosAcoesApontamento);
+		Optional<ModuloAcao> listarAlocacaoPorColaborador = todosModulosAcoesAlocacao.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("LISTAR_POR_COLABORADOR_ALOCACAO")).findFirst();
+		Optional<ModuloAcao> cadastrarApontamento = todosModulosAcoesApontamento.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("CADASTRAR_APONTAMENTO")).findFirst();
+		colaborador.addModuloAcao(listarAlocacaoPorColaborador.get());
+		colaborador.addModuloAcao(cadastrarApontamento.get());
 		perfilService.salvar(colaborador);
 	}
 
