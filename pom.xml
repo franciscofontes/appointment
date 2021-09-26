@@ -13,7 +13,7 @@
 	<artifactId>appointment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>appointment</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Sistema para apontamento de horas em projetos</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -59,7 +59,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency>		
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>		
 	</dependencies>
 
 	<build>

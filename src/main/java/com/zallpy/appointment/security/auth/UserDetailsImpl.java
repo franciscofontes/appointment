@@ -1,4 +1,4 @@
-package com.zallpy.appointment.security.domain;
+package com.zallpy.appointment.security.auth;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -14,7 +14,6 @@ public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	private String nome;
 	private String email;
 	private String senha;
 	private Collection<? extends GrantedAuthority> authorities;
@@ -22,10 +21,9 @@ public class UserDetailsImpl implements UserDetails {
 	public UserDetailsImpl() {
 	}
 
-	public UserDetailsImpl(Long id, String nome, String email, String senha, Perfil perfil) {
+	public UserDetailsImpl(Long id, String email, String senha, Perfil perfil) {
 		super();
-		this.id = id;
-		this.nome = nome;
+		this.id = id;		
 		this.email = email;
 		this.senha = senha;
 		this.authorities = perfil.getModuloAcoes().stream().map(ma -> new SimpleGrantedAuthority(ma.getAuthority())).collect(Collectors.toList());
@@ -68,10 +66,6 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
-	}
-
-	public String getNome() {
-		return nome;
 	}
 
 	public boolean hasAuthority(String authority) {

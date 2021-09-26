@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.zallpy.appointment.application.domain.entity.Alocacao;
@@ -50,26 +51,29 @@ public class DevConfig implements WebMvcConfigurer {
 
 	@Autowired
 	private ModuloAcaoService moduloAcaoService;
-	
+
 	@Autowired
 	private PerfilService perfilService;
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
+	@Autowired
+	private BCryptPasswordEncoder pe;
+
 	private List<Acao> todasAcoes = new ArrayList<>();
 
 	@Transactional
 	@Bean
 	public boolean instantiateDatabase() throws Exception {
 		cadastrarAlocacoes();
-		
+
 		cadastrarAcoes();
 		cadastrarModulos();
 		cadastrarModulosAcoes();
 		cadastrarPerfis();
 		cadastrarUsuariosAtualizarColaboradores();
-		
+
 		return true;
 	}
 
@@ -94,65 +98,65 @@ public class DevConfig implements WebMvcConfigurer {
 
 	@Transactional
 	private void cadastrarAcoes() throws Exception {
-		
+
 		Acao listar = new Acao("LISTAR", "Listar", "Lista registros");
 		Acao cadastrar = new Acao("CADASTRAR", "Cadastrar", "Cadastra registros");
 		Acao editar = new Acao("EDITAR", "Editar", "Edita registros");
 		Acao remover = new Acao("REMOVER", "Remover", "Remove registros");
-		
+
 		todasAcoes = Arrays.asList(listar, cadastrar, editar, remover);
-		
-		acaoService.salvarTodos(todasAcoes);		
+
+		acaoService.salvarTodos(todasAcoes);
 	}
-	
+
 	@Transactional
 	private void cadastrarModulos() throws Exception {
 		Modulo apontamento = new Modulo("APONTAMENTO", "Apontamento", "Módulo para apontamento em projetos");
 		moduloService.salvarTodos(Arrays.asList(apontamento));
 	}
-	
+
 	@Transactional
 	private void cadastrarModulosAcoes() throws Exception {
-		Modulo apontamento = moduloService.buscarPorNome("APONTAMENTO");		
+		Modulo apontamento = moduloService.buscarPorNome("APONTAMENTO");
 		for (Acao acao : todasAcoes) {
 			moduloAcaoService.salvar(new ModuloAcao(apontamento, acao));
-		}	
-	}	
-	
+		}
+	}
+
 	@Transactional
-	private void cadastrarPerfis() throws Exception {	
-		
-		Modulo apontamento = moduloService.buscarPorNome("APONTAMENTO");		
+	private void cadastrarPerfis() throws Exception {
+
+		Modulo apontamento = moduloService.buscarPorNome("APONTAMENTO");
 		List<ModuloAcao> todasModulosAcoesApontamento = moduloAcaoService.buscarPorModulo(apontamento.getId());
-		
+
 		Perfil adm = new Perfil("ADM");
 		adm.addModulosAcao(todasModulosAcoesApontamento);
 		perfilService.salvar(adm);
 
-		Perfil colaborador = new Perfil("COLABORADOR");		
+		Perfil colaborador = new Perfil("COLABORADOR");
 		colaborador.addModulosAcao(todasModulosAcoesApontamento);
 		perfilService.salvar(colaborador);
 	}
-	
+
 	@Transactional
 	private void cadastrarUsuariosAtualizarColaboradores() throws Exception {
-		
+
 		Perfil adm = perfilService.buscarPorNome("ADM");
 		Perfil colaborador = perfilService.buscarPorNome("COLABORADOR");
-		
-		Usuario usuarioAdm = new Usuario("adm@teste.com.br", adm);
-		Usuario usuarioProg1 = new Usuario("prog1@teste.com.br", colaborador);
-		Usuario usuarioProg2 = new Usuario("prog2@teste.com.br", colaborador);
-				
+
+		Usuario usuarioAdm = new Usuario("adm@teste.com.br", pe.encode("123"), adm);
+		Usuario usuarioProg1 = new Usuario("prog1@teste.com.br", pe.encode("123"), colaborador);
+		Usuario usuarioProg2 = new Usuario("prog2@teste.com.br", pe.encode("123"), colaborador);
+
 		usuarioService.salvarTodos(Arrays.asList(usuarioAdm, usuarioProg1, usuarioProg2));
-				
+
 		Colaborador administrador = colaboradorService.buscarPorNome("Administrador");
-		administrador.setUsuario(usuarioAdm);		
+		administrador.setUsuario(usuarioAdm);
 		Colaborador programador1 = colaboradorService.buscarPorNome("Programador 1");
-		programador1.setUsuario(usuarioProg1);		
+		programador1.setUsuario(usuarioProg1);
 		Colaborador programador2 = colaboradorService.buscarPorNome("Programador 2");
 		programador2.setUsuario(usuarioProg2);
-		
-		colaboradorService.salvarTodos(Arrays.asList(administrador, programador1, programador2));		
-	}	
+
+		colaboradorService.salvarTodos(Arrays.asList(administrador, programador1, programador2));
+	}
 }

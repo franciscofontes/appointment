@@ -1,1 +1,4 @@
 spring.profiles.active: dev
+jwt:
+  secret: appZalpy@teste
+  expiration: 600000

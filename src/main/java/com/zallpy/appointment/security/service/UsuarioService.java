@@ -1,5 +1,6 @@
 package com.zallpy.appointment.security.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,12 @@ public class UsuarioService implements CrudService<Usuario, Long> {
 	public List<Usuario> buscarPorPerfil(Perfil perfil) {
 		return repository.findByPerfil(perfil);
 	}
+	
+	public void editarUtimoAcesso(String email) {
+		Usuario usuario = buscarPorEmail(email);
+		usuario.setDataUltimoAcesso(new Date());
+		repository.save(usuario);
+	}	
 	
 	@Override
 	public JpaRepository<Usuario, Long> getRepository() {
