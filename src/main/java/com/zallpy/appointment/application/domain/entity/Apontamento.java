@@ -1,7 +1,6 @@
 package com.zallpy.appointment.application.domain.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -10,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class Apontamento implements Serializable {
@@ -22,8 +19,7 @@ public class Apontamento implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date data;
+	private Integer minutos;
 
 	@JoinColumn(name = "alocacao_id", referencedColumnName = "id")
 	@ManyToOne
@@ -32,8 +28,8 @@ public class Apontamento implements Serializable {
 	public Apontamento() {
 	}
 
-	public Apontamento(Date data) {
-		this.data = data;
+	public Apontamento(Integer minutos) {
+		this.minutos = minutos;
 	}
 
 	public Long getId() {
@@ -44,12 +40,12 @@ public class Apontamento implements Serializable {
 		this.id = id;
 	}
 
-	public Date getData() {
-		return data;
+	public Integer getMinutos() {
+		return minutos;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setMinutos(Integer minutos) {
+		this.minutos = minutos;
 	}
 
 	public Alocacao getAlocacao() {
@@ -79,7 +75,7 @@ public class Apontamento implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Apontamento [id=" + id + ", data=" + data + "]";
+		return "Apontamento [id=" + id + ", minutos=" + minutos + "]";
 	}
 
 }

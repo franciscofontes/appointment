@@ -38,14 +38,16 @@ public class Alocacao implements Serializable {
 	public Alocacao() {
 	}
 
+	public Alocacao(Long id) {
+		this.id = id;
+	}
+
 	public Alocacao(Colaborador colaborador, Projeto projeto) {
-		super();
 		this.colaborador = colaborador;
 		this.projeto = projeto;
 	}
-	
+
 	public Alocacao(Colaborador colaborador) {
-		super();
 		this.colaborador = colaborador;
 	}
 

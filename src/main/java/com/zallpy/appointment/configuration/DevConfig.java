@@ -1,7 +1,6 @@
 package com.zallpy.appointment.configuration;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import javax.transaction.Transactional;
 
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.zallpy.appointment.application.domain.entity.Alocacao;
-import com.zallpy.appointment.application.domain.entity.Apontamento;
 import com.zallpy.appointment.application.domain.entity.Colaborador;
 import com.zallpy.appointment.application.domain.entity.Projeto;
 import com.zallpy.appointment.application.service.AlocacaoService;
@@ -46,8 +44,6 @@ public class DevConfig implements WebMvcConfigurer {
 		Alocacao a1 = new Alocacao(programador1, projetoA);
 		Alocacao a2 = new Alocacao(programador2, projetoA);
 		Alocacao a3 = new Alocacao(programador2, projetoB);
-
-		a1.addApontamento(new Apontamento(new Date()));
 		
 		colaboradorService.salvarTodos(Arrays.asList(administrador, programador1, programador2));
 		projetoService.salvarTodos(Arrays.asList(projetoA, projetoB));
