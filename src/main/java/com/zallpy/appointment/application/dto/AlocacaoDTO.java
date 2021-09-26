@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.zallpy.appointment.application.domain.entity.Alocacao;
-import com.zallpy.appointment.application.domain.entity.Colaborador;
 import com.zallpy.appointment.application.domain.entity.Projeto;
 
 public class AlocacaoDTO implements Serializable {
@@ -13,13 +12,13 @@ public class AlocacaoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	private Colaborador colaborador;
+	private ColaboradorDTO colaborador;
 	private Projeto projeto;
 	private Set<ApontamentoDTO> apontamentos;
 
 	public AlocacaoDTO(Alocacao alocacao) {
 		this.id = alocacao.getId();
-		this.colaborador = alocacao.getColaborador();
+		this.colaborador = new ColaboradorDTO(alocacao.getColaborador());
 		this.projeto = alocacao.getProjeto();
 		this.apontamentos = alocacao.getApontamentos().stream().map(apontamento -> new ApontamentoDTO(apontamento)).collect(Collectors.toSet());
 	}
@@ -32,11 +31,11 @@ public class AlocacaoDTO implements Serializable {
 		this.id = id;
 	}
 
-	public Colaborador getColaborador() {
+	public ColaboradorDTO getColaborador() {
 		return colaborador;
 	}
 
-	public void setColaborador(Colaborador colaborador) {
+	public void setColaborador(ColaboradorDTO colaborador) {
 		this.colaborador = colaborador;
 	}
 

@@ -2,18 +2,18 @@ package com.zallpy.appointment.application.dto;
 
 import java.io.Serializable;
 
-import com.zallpy.appointment.application.domain.entity.Projeto;
+import com.zallpy.appointment.application.domain.entity.Colaborador;
 
-public class ProjetoDTO implements Serializable {
+public class ColaboradorDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
 	private String nome;
 
-	public ProjetoDTO(Projeto projeto) {
-		this.id = projeto.getId();
-		this.nome = projeto.getNome();
+	public ColaboradorDTO(Colaborador colaborador) {
+		this.id = colaborador.getId();
+		this.nome = colaborador.getNome();
 	}
 
 	public Long getId() {
