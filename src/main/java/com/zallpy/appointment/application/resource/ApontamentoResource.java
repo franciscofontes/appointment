@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ public class ApontamentoResource {
 	@Autowired
 	private ApontamentoService service;		
 
+	@PreAuthorize("hasAuthority('CADASTRAR_APONTAMENTO')")
 	@PostMapping()
 	public ResponseEntity<Void> cadastrar(@Valid @RequestBody ApontamentoDTO apontamento) throws MethodArgumentNotValidException {
 		service.salvarFromDTO(apontamento);

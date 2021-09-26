@@ -134,7 +134,7 @@ public class DevConfig implements WebMvcConfigurer {
 		perfilService.salvar(adm);
 
 		Perfil colaborador = new Perfil("COLABORADOR");
-		colaborador.addModulosAcao(todasModulosAcoesApontamento);
+		//colaborador.addModulosAcao(todasModulosAcoesApontamento);
 		perfilService.salvar(colaborador);
 	}
 
