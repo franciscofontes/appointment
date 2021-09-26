@@ -19,7 +19,7 @@ public class ProjetoService implements CrudService<Projeto, Long> {
 
 	public Page<ProjetoDTO> buscarTodosPorPaginaDTO(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
-		Page<Projeto> paginacao = getRepository().findAll(pageRequest);
+		Page<Projeto> paginacao = repository.findAll(pageRequest);
 		return paginacao.map(projeto -> new ProjetoDTO(projeto));
 	}
 

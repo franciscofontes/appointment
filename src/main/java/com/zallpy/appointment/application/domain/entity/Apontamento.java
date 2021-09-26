@@ -33,7 +33,6 @@ public class Apontamento implements Serializable {
 	}
 
 	public Apontamento(Date data) {
-		super();
 		this.data = data;
 	}
 

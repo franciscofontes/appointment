@@ -2,9 +2,9 @@ package com.zallpy.appointment.application.dto;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.zallpy.appointment.application.domain.entity.Alocacao;
-import com.zallpy.appointment.application.domain.entity.Apontamento;
 import com.zallpy.appointment.application.domain.entity.Colaborador;
 import com.zallpy.appointment.application.domain.entity.Projeto;
 
@@ -15,13 +15,13 @@ public class AlocacaoDTO implements Serializable {
 	private Long id;
 	private Colaborador colaborador;
 	private Projeto projeto;
-	private Set<Apontamento> apontamentos;
+	private Set<ApontamentoDTO> apontamentos;
 
 	public AlocacaoDTO(Alocacao alocacao) {
 		this.id = alocacao.getId();
 		this.colaborador = alocacao.getColaborador();
 		this.projeto = alocacao.getProjeto();
-		this.apontamentos = alocacao.getApontamentos();
+		this.apontamentos = alocacao.getApontamentos().stream().map(apontamento -> new ApontamentoDTO(apontamento)).collect(Collectors.toSet());
 	}
 
 	public Long getId() {
@@ -48,11 +48,11 @@ public class AlocacaoDTO implements Serializable {
 		this.projeto = projeto;
 	}
 
-	public Set<Apontamento> getApontamentos() {
+	public Set<ApontamentoDTO> getApontamentos() {
 		return apontamentos;
 	}
 
-	public void setApontamentos(Set<Apontamento> apontamentos) {
+	public void setApontamentos(Set<ApontamentoDTO> apontamentos) {
 		this.apontamentos = apontamentos;
 	}
 
