@@ -22,10 +22,12 @@ import com.zallpy.appointment.security.domain.entity.Acao;
 import com.zallpy.appointment.security.domain.entity.Modulo;
 import com.zallpy.appointment.security.domain.entity.ModuloAcao;
 import com.zallpy.appointment.security.domain.entity.Perfil;
+import com.zallpy.appointment.security.domain.entity.Usuario;
 import com.zallpy.appointment.security.service.AcaoService;
 import com.zallpy.appointment.security.service.ModuloAcaoService;
 import com.zallpy.appointment.security.service.ModuloService;
 import com.zallpy.appointment.security.service.PerfilService;
+import com.zallpy.appointment.security.service.UsuarioService;
 
 @Configuration
 @Profile("dev")
@@ -50,7 +52,10 @@ public class DevConfig implements WebMvcConfigurer {
 	private ModuloAcaoService moduloAcaoService;
 	
 	@Autowired
-	private PerfilService perfilService;	
+	private PerfilService perfilService;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	private List<Acao> todasAcoes = new ArrayList<>();
 
@@ -63,6 +68,7 @@ public class DevConfig implements WebMvcConfigurer {
 		cadastrarModulos();
 		cadastrarModulosAcoes();
 		cadastrarPerfis();
+		cadastrarUsuariosAtualizarColaboradores();
 		
 		return true;
 	}
@@ -119,12 +125,34 @@ public class DevConfig implements WebMvcConfigurer {
 		Modulo apontamento = moduloService.buscarPorNome("APONTAMENTO");		
 		List<ModuloAcao> todasModulosAcoesApontamento = moduloAcaoService.buscarPorModulo(apontamento.getId());
 		
-		Perfil root = new Perfil("ROOT");
-		root.addModulosAcao(todasModulosAcoesApontamento);
-		perfilService.salvar(root);
+		Perfil adm = new Perfil("ADM");
+		adm.addModulosAcao(todasModulosAcoesApontamento);
+		perfilService.salvar(adm);
 
-		Perfil colaborador = new Perfil("COLAB");		
+		Perfil colaborador = new Perfil("COLABORADOR");		
 		colaborador.addModulosAcao(todasModulosAcoesApontamento);
 		perfilService.salvar(colaborador);
+	}
+	
+	@Transactional
+	private void cadastrarUsuariosAtualizarColaboradores() throws Exception {
+		
+		Perfil adm = perfilService.buscarPorNome("ADM");
+		Perfil colaborador = perfilService.buscarPorNome("COLABORADOR");
+		
+		Usuario usuarioAdm = new Usuario("adm@teste.com.br", adm);
+		Usuario usuarioProg1 = new Usuario("prog1@teste.com.br", colaborador);
+		Usuario usuarioProg2 = new Usuario("prog2@teste.com.br", colaborador);
+				
+		usuarioService.salvarTodos(Arrays.asList(usuarioAdm, usuarioProg1, usuarioProg2));
+				
+		Colaborador administrador = colaboradorService.buscarPorNome("Administrador");
+		administrador.setUsuario(usuarioAdm);		
+		Colaborador programador1 = colaboradorService.buscarPorNome("Programador 1");
+		programador1.setUsuario(usuarioProg1);		
+		Colaborador programador2 = colaboradorService.buscarPorNome("Programador 2");
+		programador2.setUsuario(usuarioProg2);
+		
+		colaboradorService.salvarTodos(Arrays.asList(administrador, programador1, programador2));		
 	}	
 }

@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+import com.zallpy.appointment.security.domain.entity.Usuario;
 
 @Entity
 public class Colaborador implements Serializable {
@@ -20,6 +24,10 @@ public class Colaborador implements Serializable {
 
 	@Column(unique = true)
 	private String nome;
+	
+	@OneToOne
+	@JoinColumn(name = "usuario_id")
+	private Usuario usuario;
 
 	public Colaborador() {
 	}
@@ -46,6 +54,14 @@ public class Colaborador implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	@Override

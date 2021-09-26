@@ -25,8 +25,6 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
-
     private boolean ativo;
 
     @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation    
@@ -50,22 +48,19 @@ public class Usuario implements Serializable {
     	this.dataCadastro = new Date();
     }
 
-    public Usuario(String nome, String email) {
-        this.nome = nome;
+    public Usuario(String email) {
         this.email = email;
         this.dataCadastro = new Date();
     }
     
-    public Usuario(String nome, String email, Perfil perfil) {
-    	this.nome = nome;
+    public Usuario(String email, Perfil perfil) {    	
     	this.email = email;
     	this.perfil = perfil;
     	this.ativo = true;
     	this.dataCadastro = new Date();
     }    
     
-    public Usuario(String nome, String email, String senha, Perfil perfil) {
-    	this.nome = nome;
+    public Usuario(String email, String senha, Perfil perfil) {
     	this.email = email;
     	this.senha = senha;
     	this.perfil = perfil;
@@ -88,14 +83,6 @@ public class Usuario implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public boolean getAtivo() {
