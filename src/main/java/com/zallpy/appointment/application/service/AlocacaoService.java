@@ -1,8 +1,5 @@
 package com.zallpy.appointment.application.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,20 +19,22 @@ public class AlocacaoService implements CrudService<Alocacao, Long> {
 	@Autowired
 	private AlocacaoRepository repository;
 
-	public Page<AlocacaoDTO> buscarTodosPorPaginaDTO(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<AlocacaoDTO> buscarTodos(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
 		Page<Alocacao> paginacao = repository.findByPage(pageRequest);
 		return paginacao.map(alocacao -> new AlocacaoDTO(alocacao));
 	}
 
-	public List<AlocacaoDTO> buscarAlocacoesPorProjeto(Long idProjeto) {
-		List<Alocacao> alocacoes = repository.findByProjeto(new Projeto(idProjeto));
-		return alocacoes.stream().map(alocacao -> new AlocacaoDTO(alocacao)).collect(Collectors.toList());
+	public Page<AlocacaoDTO> buscarAlocacoesPorProjeto(Long idProjeto, Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+		Page<Alocacao> paginacao = repository.findByProjeto(new Projeto(idProjeto), pageRequest);
+		return paginacao.map(alocacao -> new AlocacaoDTO(alocacao));
 	}
 
-	public List<AlocacaoDTO> buscarAlocacoesPorColaborador(Long idColaborador) {
-		List<Alocacao> alocacoes = repository.findByColaborador(new Colaborador(idColaborador));
-		return alocacoes.stream().map(alocacao -> new AlocacaoDTO(alocacao)).collect(Collectors.toList());
+	public Page<AlocacaoDTO> buscarAlocacoesPorColaborador(Long idColaborador, Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+		Page<Alocacao> paginacao = repository.findByColaborador(new Colaborador(idColaborador), pageRequest);
+		return paginacao.map(alocacao -> new AlocacaoDTO(alocacao));
 	}
 
 	@Override

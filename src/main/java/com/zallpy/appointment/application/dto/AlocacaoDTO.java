@@ -1,11 +1,13 @@
 package com.zallpy.appointment.application.dto;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.zallpy.appointment.application.domain.entity.Alocacao;
 import com.zallpy.appointment.application.domain.entity.Projeto;
+import com.zallpy.appointment.application.helper.DateHelper;
 
 public class AlocacaoDTO implements Serializable {
 
@@ -21,6 +23,15 @@ public class AlocacaoDTO implements Serializable {
 		this.colaborador = new ColaboradorDTO(alocacao.getColaborador());
 		this.projeto = alocacao.getProjeto();
 		this.apontamentos = alocacao.getApontamentos().stream().map(apontamento -> new ApontamentoDTO(apontamento)).collect(Collectors.toSet());
+	}
+	
+	public String getTotalHoras() {
+		int totalMinutos = 0;
+		for(ApontamentoDTO apontamento : apontamentos) {
+			totalMinutos += apontamento.getMinutos();
+		}
+		DateHelper dateHelper = new DateHelper();
+		return dateHelper.getHoras(totalMinutos);
 	}
 
 	public Long getId() {
@@ -48,6 +59,9 @@ public class AlocacaoDTO implements Serializable {
 	}
 
 	public Set<ApontamentoDTO> getApontamentos() {
+		if (apontamentos == null) {
+			apontamentos = new HashSet<>();
+		}
 		return apontamentos;
 	}
 

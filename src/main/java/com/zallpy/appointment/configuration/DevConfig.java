@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.zallpy.appointment.application.domain.entity.Alocacao;
+import com.zallpy.appointment.application.domain.entity.Apontamento;
 import com.zallpy.appointment.application.domain.entity.Colaborador;
 import com.zallpy.appointment.application.domain.entity.Projeto;
 import com.zallpy.appointment.application.service.AlocacaoService;
@@ -90,8 +91,11 @@ public class DevConfig implements WebMvcConfigurer {
 		Projeto projetoB = new Projeto("Projeto Cliente B");
 
 		Alocacao a1 = new Alocacao(programador1, projetoA);
+		a1.addApontamento(new Apontamento(120));
 		Alocacao a2 = new Alocacao(programador2, projetoA);
+		a2.addApontamento(new Apontamento(60));
 		Alocacao a3 = new Alocacao(programador2, projetoB);
+		a3.addApontamento(new Apontamento(60));
 
 		colaboradorService.salvarTodos(Arrays.asList(administrador, programador1, programador2));
 		projetoService.salvarTodos(Arrays.asList(projetoA, projetoB));

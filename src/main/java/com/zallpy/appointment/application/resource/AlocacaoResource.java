@@ -1,7 +1,5 @@
 package com.zallpy.appointment.application.resource;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -29,18 +27,28 @@ public class AlocacaoResource {
 			@RequestParam(value = "lines", defaultValue = "10") Integer linesPerPage,
 			@RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
-		return ResponseEntity.ok().body(service.buscarTodosPorPaginaDTO(page, linesPerPage, orderBy, direction));
+		return ResponseEntity.ok().body(service.buscarTodos(page, linesPerPage, orderBy, direction));
 	}
 	
 	@PreAuthorize("hasAuthority('LISTAR_POR_PROJETO_ALOCACAO')")
 	@GetMapping(value = "/projeto/{id}")
-	public ResponseEntity<List<AlocacaoDTO>> buscarAlocacoesPorProjeto(@PathVariable Long id) {
-		return ResponseEntity.ok().body(service.buscarAlocacoesPorProjeto(id));
+	public ResponseEntity<Page<AlocacaoDTO>> buscarAlocacoesPorProjeto(
+			@PathVariable Long id,
+			@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "lines", defaultValue = "10") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+		return ResponseEntity.ok().body(service.buscarAlocacoesPorProjeto(id, page, linesPerPage, orderBy, direction));
 	}
 	
 	@PreAuthorize("hasAuthority('LISTAR_POR_COLABORADOR_ALOCACAO')")
 	@GetMapping(value = "/colaborador/{id}")
-	public ResponseEntity<List<AlocacaoDTO>> buscarAlocacoesPorColaborador(@PathVariable Long id) {
-		return ResponseEntity.ok().body(service.buscarAlocacoesPorColaborador(id));
+	public ResponseEntity<Page<AlocacaoDTO>> buscarAlocacoesPorColaborador(
+			@PathVariable Long id,
+			@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "lines", defaultValue = "10") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+		return ResponseEntity.ok().body(service.buscarAlocacoesPorColaborador(id, page, linesPerPage, orderBy, direction));
 	}	
 }
