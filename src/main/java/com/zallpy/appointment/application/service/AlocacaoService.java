@@ -24,7 +24,7 @@ public class AlocacaoService implements CrudService<Alocacao, Long> {
 
 	public Page<AlocacaoDTO> buscarTodosPorPaginaDTO(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
-		Page<Alocacao> paginacao = repository.findAll(pageRequest);
+		Page<Alocacao> paginacao = repository.findByPage(pageRequest);
 		return paginacao.map(alocacao -> new AlocacaoDTO(alocacao));
 	}
 

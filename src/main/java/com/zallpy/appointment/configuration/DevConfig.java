@@ -183,11 +183,11 @@ public class DevConfig implements WebMvcConfigurer {
 		usuarioService.salvarTodos(Arrays.asList(usuarioAdm, usuarioProg1, usuarioProg2));
 
 		Colaborador administrador = colaboradorService.buscarPorNome("Administrador");
-		administrador.setUsuario(usuarioAdm);
+		administrador.setIdUsuario(usuarioAdm.getId());
 		Colaborador programador1 = colaboradorService.buscarPorNome("Programador 1");
-		programador1.setUsuario(usuarioProg1);
+		programador1.setIdUsuario(usuarioProg1.getId());
 		Colaborador programador2 = colaboradorService.buscarPorNome("Programador 2");
-		programador2.setUsuario(usuarioProg2);
+		programador2.setIdUsuario(usuarioProg2.getId());
 
 		colaboradorService.salvarTodos(Arrays.asList(administrador, programador1, programador2));
 	}
