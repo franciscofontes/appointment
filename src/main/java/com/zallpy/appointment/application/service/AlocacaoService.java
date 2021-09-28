@@ -36,10 +36,17 @@ public class AlocacaoService implements CrudService<Alocacao, Long> {
 		Page<Alocacao> paginacao = repository.findByColaborador(new Colaborador(idColaborador), pageRequest);
 		return paginacao.map(alocacao -> new AlocacaoDTO(alocacao));
 	}
+	
+	public Page<AlocacaoDTO> buscarAlocacoesPorColaboradoreProjeto(Long idColaborador, Long idProjeto, Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+		Page<Alocacao> paginacao = repository.findByColaboradorAndProjeto(new Colaborador(idColaborador), new Projeto(idProjeto), pageRequest);
+		return paginacao.map(alocacao -> new AlocacaoDTO(alocacao));
+	}
 
 	@Override
 	public JpaRepository<Alocacao, Long> getRepository() {
 		return repository;
 	}
+
 
 }

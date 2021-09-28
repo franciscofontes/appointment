@@ -51,4 +51,16 @@ public class AlocacaoResource {
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 		return ResponseEntity.ok().body(service.buscarAlocacoesPorColaborador(id, page, linesPerPage, orderBy, direction));
 	}	
+	
+	@PreAuthorize("hasAuthority('LISTAR_POR_COLABORADOR_ALOCACAO')")
+	@GetMapping(value = "/colaborador/{idColaborador}/projeto/{idProjeto}")
+	public ResponseEntity<Page<AlocacaoDTO>> buscarAlocacoesPorColaboradorEProjeto(
+			@PathVariable Long idColaborador,
+			@PathVariable Long idProjeto,
+			@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "lines", defaultValue = "10") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+		return ResponseEntity.ok().body(service.buscarAlocacoesPorColaboradoreProjeto(idColaborador, idProjeto, page, linesPerPage, orderBy, direction));
+	}	
 }

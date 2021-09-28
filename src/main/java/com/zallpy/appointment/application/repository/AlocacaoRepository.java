@@ -21,5 +21,7 @@ public interface AlocacaoRepository extends JpaRepository<Alocacao, Long> {
 
 	@Query(value = "select a from Alocacao a left join fetch a.apontamentos where a.projeto = :projeto", countQuery = "select count(1) from Alocacao a where a.projeto = :projeto")
 	Page<Alocacao> findByProjeto(Projeto projeto, Pageable pageable);
-
+	
+	@Query(value = "select a from Alocacao a left join fetch a.apontamentos where a.colaborador = :colaborador and a.projeto = :projeto", countQuery = "select count(1) from Alocacao a where a.colaborador = :colaborador and a.projeto = :projeto")
+	Page<Alocacao> findByColaboradorAndProjeto(Colaborador colaborador, Projeto projeto, Pageable pageable);
 }
