@@ -105,6 +105,7 @@ public class DevConfig implements WebMvcConfigurer {
 	@Transactional
 	private void cadastrarAcoes() throws Exception {
 
+		Acao exibir = new Acao("EXIBIR", "Exibir", "Mostrar item no menu");
 		Acao listar = new Acao("LISTAR", "Listar", "Lista registros");
 		Acao cadastrar = new Acao("CADASTRAR", "Cadastrar", "Cadastra registros");
 		Acao editar = new Acao("EDITAR", "Editar", "Edita registros");
@@ -112,7 +113,7 @@ public class DevConfig implements WebMvcConfigurer {
 		Acao listarPorProjeto = new Acao("LISTAR_POR_PROJETO", "Listar por projeto", "Lista registros");
 		Acao listarPorColaborador = new Acao("LISTAR_POR_COLABORADOR", "Listar por colaborador", "Lista registros");		
 
-		todasAcoes = Arrays.asList(listar, cadastrar, editar, remover, listarPorProjeto, listarPorColaborador);
+		todasAcoes = Arrays.asList(exibir, listar, cadastrar, editar, remover, listarPorProjeto, listarPorColaborador);
 
 		acaoService.salvarTodos(todasAcoes);
 	}
@@ -132,13 +133,16 @@ public class DevConfig implements WebMvcConfigurer {
 	@Transactional
 	private void cadastrarModulosAcoes() throws Exception {
 
+		Optional<Acao> exibir = todasAcoes.stream().filter(acao -> acao.getNome().equals("EXIBIR")).findFirst();
 		Optional<Acao> listar = todasAcoes.stream().filter(acao -> acao.getNome().equals("LISTAR")).findFirst();
 		Optional<Acao> listarPorProjeto = todasAcoes.stream().filter(acao -> acao.getNome().equals("LISTAR_POR_PROJETO")).findFirst();
 		Optional<Acao> listarPorColaborador = todasAcoes.stream().filter(acao -> acao.getNome().equals("LISTAR_POR_COLABORADOR")).findFirst();
 		Optional<Acao> cadastrar = todasAcoes.stream().filter(acao -> acao.getNome().equals("CADASTRAR")).findFirst();
 		
 		Optional<Modulo> projeto = todosModulos.stream().filter(modulo -> modulo.getNome().equals("PROJETO")).findFirst();
+		moduloAcaoService.salvar(new ModuloAcao(projeto.get(), exibir.get()));
 		moduloAcaoService.salvar(new ModuloAcao(projeto.get(), listar.get()));
+		moduloAcaoService.salvar(new ModuloAcao(projeto.get(), listarPorColaborador.get()));
 		
 		Optional<Modulo> alocacao = todosModulos.stream().filter(modulo -> modulo.getNome().equals("ALOCACAO")).findFirst();
 		moduloAcaoService.salvar(new ModuloAcao(alocacao.get(), listar.get()));
@@ -159,16 +163,22 @@ public class DevConfig implements WebMvcConfigurer {
 		List<ModuloAcao> todosModulosAcoesProjeto = moduloAcaoService.buscarPorModulo(projeto.get().getId());
 		List<ModuloAcao> todosModulosAcoesAlocacao = moduloAcaoService.buscarPorModulo(alocacao.get().getId());
 		List<ModuloAcao> todosModulosAcoesApontamento = moduloAcaoService.buscarPorModulo(apontamento.get().getId());
+		Optional<ModuloAcao> exibirProjeto = todosModulosAcoesProjeto.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("EXIBIR_PROJETO")).findFirst();
+		Optional<ModuloAcao> listarProjeto = todosModulosAcoesProjeto.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("LISTAR_PROJETO")).findFirst();
+		Optional<ModuloAcao> listarProjetoPorColaborador = todosModulosAcoesProjeto.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("LISTAR_POR_COLABORADOR_PROJETO")).findFirst();
+		Optional<ModuloAcao> listarAlocacaoPorColaborador = todosModulosAcoesAlocacao.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("LISTAR_POR_COLABORADOR_ALOCACAO")).findFirst();
+		Optional<ModuloAcao> cadastrarApontamento = todosModulosAcoesApontamento.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("CADASTRAR_APONTAMENTO")).findFirst();		
 
-		Perfil adm = new Perfil("ADM");
-		adm.addModulosAcao(todosModulosAcoesProjeto);
+		Perfil adm = new Perfil("ADM");	
+		adm.addModuloAcao(exibirProjeto.get());
+		adm.addModuloAcao(listarProjeto.get());
 		adm.addModulosAcao(todosModulosAcoesAlocacao);
 		adm.addModulosAcao(todosModulosAcoesApontamento);
 		perfilService.salvar(adm);
 
 		Perfil colaborador = new Perfil("COLABORADOR");
-		Optional<ModuloAcao> listarAlocacaoPorColaborador = todosModulosAcoesAlocacao.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("LISTAR_POR_COLABORADOR_ALOCACAO")).findFirst();
-		Optional<ModuloAcao> cadastrarApontamento = todosModulosAcoesApontamento.stream().filter(moduloAcao -> moduloAcao.getAuthority().equals("CADASTRAR_APONTAMENTO")).findFirst();
+		colaborador.addModuloAcao(exibirProjeto.get());
+		colaborador.addModuloAcao(listarProjetoPorColaborador.get());
 		colaborador.addModuloAcao(listarAlocacaoPorColaborador.get());
 		colaborador.addModuloAcao(cadastrarApontamento.get());
 		perfilService.salvar(colaborador);

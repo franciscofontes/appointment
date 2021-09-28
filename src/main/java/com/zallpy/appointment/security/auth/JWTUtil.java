@@ -18,8 +18,9 @@ public class JWTUtil {
 	@Value("${jwt.expiration}")
 	private Long expiration;
 
-	public String generateToken(String username, String[] authorities) {
-		return Jwts.builder().setSubject(username)				
+	public String generateToken(String username, Long id, String[] authorities) {
+		return Jwts.builder().setSubject(username)
+				.claim("id", id)
 				.claim("authorities", authorities)
 				.setExpiration(new Date(System.currentTimeMillis() + expiration))
 				.signWith(SignatureAlgorithm.HS512, secret.getBytes())

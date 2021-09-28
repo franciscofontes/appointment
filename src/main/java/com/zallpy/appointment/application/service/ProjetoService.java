@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import com.zallpy.appointment.application.domain.entity.Colaborador;
 import com.zallpy.appointment.application.domain.entity.Projeto;
 import com.zallpy.appointment.application.dto.ProjetoDTO;
 import com.zallpy.appointment.application.repository.ProjetoRepository;
@@ -17,9 +18,15 @@ public class ProjetoService implements CrudService<Projeto, Long> {
 	@Autowired
 	private ProjetoRepository repository;
 
-	public Page<ProjetoDTO> buscarTodosPorPaginaDTO(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<ProjetoDTO> buscarTodos(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
 		Page<Projeto> paginacao = repository.findAll(pageRequest);
+		return paginacao.map(projeto -> new ProjetoDTO(projeto));
+	}
+	
+	public Page<ProjetoDTO> buscarProjetosPorColaborador(Long id, Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+		Page<Projeto> paginacao = repository.findByIdColaborador(id, pageRequest);
 		return paginacao.map(projeto -> new ProjetoDTO(projeto));
 	}
 

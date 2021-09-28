@@ -11,4 +11,6 @@ import com.zallpy.appointment.application.domain.entity.Colaborador;
 public interface ColaboradorRepository extends JpaRepository<Colaborador, Long> {
 	
 	Optional<Colaborador> findByNome(String nome);
+	
+	Optional<Colaborador> findByIdUsuario(Long idUsuario);
 }
